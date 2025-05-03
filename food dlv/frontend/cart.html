@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Delivery Booking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        .form-group input, 
+        .form-group select, 
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #ff6347;
+            outline: none;
+        }
+        .btn {
+            background-color: #ff6347;
+            color: white;
+            padding: 15px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        .btn:hover {
+            background-color: #ff4500;
+        }
+        .order-summary {
+            background-color: #f9f9f9;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .order-summary h3 {
+            margin-bottom: 10px;
+        }
+        .order-summary p {
+            margin: 5px 0;
+        }
+        .confirmation-message {
+            display: none;
+            text-align: center;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Complete Your Food Order</h1>
+
+        <!-- Step 1: Customer Information -->
+        <h2>Step 1: Your Information</h2>
+        <div class="form-group">
+            <label for="customerName">Full Name:</label>
+            <input type="text" id="customerName" required>
+        </div>
+        <div class="form-group">
+            <label for="customerPhone">Phone Number:</label>
+            <input type="tel" id="customerPhone" required>
+        </div>
+        <div class="form-group">
+            <label for="customerEmail">Email:</label>
+            <input type="email" id="customerEmail" required>
+        </div>
+
+        <!-- Step 2: Delivery Information -->
+        <h2>Step 2: Delivery Information</h2>
+        <div class="form-group">
+            <label for="deliveryAddress">Delivery Address:</label>
+            <textarea id="deliveryAddress" rows="4" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="deliveryTime">Preferred Delivery Time:</label>
+            <select id="deliveryTime" required>
+                <option value="ASAP">As Soon As Possible</option>
+                <option value="30_min">In 30 Minutes</option>
+                <option value="1_hour">In 1 Hour</option>
+            </select>
+        </div>
+
+        <!-- Step 3: Food Order -->
+        <h2>Step 3: Your Order</h2>
+        <div class="form-group">
+            <label for="foodItem">Select Food Item:</label>
+            <select id="foodItem" required>
+                <option value="grilled_salmon">Grilled Salmon - Rs 800</option>
+                <option value="indian_cuisine">Indian Thali - Rs 1000</option>
+                <option value="cheeseburger">Cheeseburger - Rs 250</option>
+                <option value="pizza">Pizza - Rs 500</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" min="1" value="1" required>
+        </div>
+
+        <!-- Step 4: Payment Information -->
+        <h2>Step 4: Payment</h2>
+        <div class="form-group">
+            <label for="cardNumber">Card Number:</label>
+            <input type="text" id="cardNumber" placeholder="1234 5678 9101 1121" required>
+        </div>
+        <div class="form-group">
+            <label for="cardExpiry">Expiry Date:</label>
+            <input type="text" id="cardExpiry" placeholder="MM/YY" required>
+        </div>
+        <div class="form-group">
+            <label for="cardCVV">CVV:</label>
+            <input type="text" id="cardCVC" placeholder="123" required>
+        </div>
+
+        <!-- Step 5: Order Summary -->
+        <div class="order-summary">
+            <h3>Order Summary</h3>
+            <p>Item: <span id="summaryItem"></span></p>
+            <p>Quantity: <span id="summaryQuantity"></span></p>
+            <p>Total Cost: Rs<span id="totalCost"></span></p>
+        </div>
+
+        <button class="btn" onclick="submitOrder()">Place Order</button>
+
+        <div class="confirmation-message" id="confirmationMessage">
+            <h3>Order Confirmed!</h3>
+            <p>Your food is on its way! Thank you for ordering.</p>
+        </div>
+    </div>
+
+    <script>
+        function submitOrder() {
+            // Fetch order details
+            const item = document.getElementById('foodItem').value;
+            const quantity = parseInt(document.getElementById('quantity').value);
+            let cost;
+
+            // Determine cost based on item
+            switch(item) {
+                case 'grilled_salmon':
+                    cost = 800 * quantity;
+                    break;
+                case 'indian_thali':
+                    cost = 1000 * quantity;
+                    break;
+                case 'cheeseburger':
+                    cost = 250 * quantity;
+                    break;
+                case 'pizza':
+                    cost = 500 * quantity;
+                    break;
+                default:
+                    cost = 0;
+            }
+
+            // Update order summary
+            document.getElementById('summaryItem').innerText = item.replace('_', ' ').toUpperCase();
+            document.getElementById('summaryQuantity').innerText = quantity;
+            document.getElementById('totalCost').innerText = cost.toFixed(2);
+
+            // Simulate order confirmation
+            document.getElementById('confirmationMessage').style.display = 'block';
+            alert('Order placed successfully!');
+        }
+    </script>
+
+</body>
+</html>
